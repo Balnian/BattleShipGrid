@@ -40,15 +40,15 @@ namespace BattleShipGrid
         /// <summary>
         /// Couleur de la bordure de la sélection
         /// </summary>
-        private Color PBorderOfSection = Color.Transparent;
+        private Color PBorderOfSelection = Color.Transparent;
 
         /// <summary>
         /// Interface public pour la couleur de la bordure de la sélection
         /// </summary>
-        public Color BorderOfSection
+        public Color BorderOfSelection
         {
-            get { return PBorderOfSection; }
-            set { PBorderOfSection = value; }
+            get { return PBorderOfSelection; }
+            set { PBorderOfSelection = value; }
         }
 
         /// <summary>
@@ -59,10 +59,10 @@ namespace BattleShipGrid
         /// <summary>
         /// Interface public pour la couleur de l'intérieur de la sélection
         /// </summary>
-        public Color BorderOfSection
+        public Color InteriorOfSelection
         {
-            get { return PBorderOfSection; }
-            set { PBorderOfSection = value; }
+            get { return PInteriorOfSelection; }
+            set { PInteriorOfSelection = value; }
         }
 
         public BattleShipGrid()
@@ -80,8 +80,7 @@ namespace BattleShipGrid
         {
             Refresh();
             Point coords = GetGridCoordOfMouse();
-
-            DrawRect(Color.Aquamarine, Color.Chocolate, coords.X * GridRectWidth, coords.Y * GridRectHeight, Width / 10, Height / 10);
+            DrawSelection(coords);
 
             //MessageBox.Show(PGridColor.ToString() + coords.X.ToString() + " " + coords.Y.ToString());
         }
@@ -110,7 +109,13 @@ namespace BattleShipGrid
             DrawGrid();
             Point coords = GetGridCoordOfMouse();
 
-            DrawRect(Color.Aquamarine, Color.Chocolate, coords.X * GridRectWidth, coords.Y * GridRectHeight, GridRectWidth, GridRectHeight);
+           // DrawRect(Color.Aquamarine, Color.Chocolate, coords.X * GridRectWidth, coords.Y * GridRectHeight, GridRectWidth, GridRectHeight);
+        }
+
+        private void DrawSelection(Point coords)
+        {
+            
+            DrawRect(BorderOfSelection, InteriorOfSelection, coords.X * GridRectWidth, coords.Y * GridRectHeight, GridRectWidth, GridRectHeight);
         }
 
         /// <summary>
