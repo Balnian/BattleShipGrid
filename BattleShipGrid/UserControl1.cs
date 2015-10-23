@@ -13,15 +13,33 @@ namespace BattleShipGrid
     public partial class BattleShipGrid : UserControl
     {
 
+        class FPoint
+        {
+            public float X;
+            public float Y;
+            public FPoint(float x, float y)
+            {
+                X = x;
+                Y = y;
+            }
+            public FPoint(Point p)
+            {
+                X=p.X;
+                Y=p.Y;
+            }
+            
+        }
+
+        #region Properties
         /// <summary>
         /// Raccourcie pour le calcule de la largeur d'une case de la grille
         /// </summary>
-        private int GridRectWidth { get { return Width / 10; } }
+        private float GridRectWidth { get { return Width / 10; } }
 
         /// <summary>
         /// Raccourcie pour le calcule de la hauteur d'une case de la grille
         /// </summary>
-        private int GridRectHeight { get { return Height / 10; } }
+        private float GridRectHeight { get { return Height / 10; } }
 
         /// <summary>
         /// Couleur de la grille
@@ -65,6 +83,12 @@ namespace BattleShipGrid
             set { PInteriorOfSelection = value; }
         }
 
+        public Image PorteAvions { get; set; }
+        public Image Croiseur { get; set; }
+        public Image SousMarin { get; set; }
+        public Image Torpilleur { get; set; }
+
+        #endregion
         public BattleShipGrid()
         {
             InitializeComponent();
@@ -79,7 +103,7 @@ namespace BattleShipGrid
         protected override void OnClick(EventArgs e)
         {
             Refresh();
-            Point coords = GetGridCoordOfMouse();
+            FPoint coords = GetGridCoordOfMouse();
             DrawSelection(coords);
 
             //MessageBox.Show(PGridColor.ToString() + coords.X.ToString() + " " + coords.Y.ToString());
@@ -89,12 +113,14 @@ namespace BattleShipGrid
         /// retourne les coordonnées dans la grille où se trouve la souris
         /// </summary>
         /// <returns>Coordonnées de la grille</returns>
-        private Point GetGridCoordOfMouse()
+        private FPoint GetGridCoordOfMouse()
         {
-            Point mouse = this.PointToClient(Cursor.Position);
-            int x = (int)Math.Floor((Decimal)mouse.X / GridRectWidth);
-            int y = (int)Math.Floor((Decimal)mouse.Y / GridRectHeight);
-            return new Point(x, y);
+            FPoint mouse = new FPoint(this.PointToClient(Cursor.Position));
+            mouse.X = (float)Math.Floor(mouse.X / GridRectWidth);
+            mouse.Y = (float)Math.Floor(mouse.Y / GridRectHeight);
+            //MessageBox.Show(mouse.X + " " + mouse.Y);
+            return mouse;
+            
         }
 
         /// <summary>
@@ -107,12 +133,32 @@ namespace BattleShipGrid
             base.OnPaint(pe);
             //Dessine la Grille
             DrawGrid();
-            Point coords = GetGridCoordOfMouse();
+            FPoint coords = GetGridCoordOfMouse();
+            DrawShips();
 
            // DrawRect(Color.Aquamarine, Color.Chocolate, coords.X * GridRectWidth, coords.Y * GridRectHeight, GridRectWidth, GridRectHeight);
         }
 
-        private void DrawSelection(Point coords)
+        #region Draw
+
+        private void DrawShips()
+        {
+            if(PorteAvions!= null)
+                DrawImage(PorteAvions,2*GridRectWidth,2*GridRectWidth,5*GridRectWidth,1*GridRectHeight);
+        }
+
+        private void DrawImage(Image img, float x, float y, float width, float height)
+        {
+            Graphics graph = this.CreateGraphics();
+            graph.DrawImage(img,x,y,width,height);
+            //MessageBox.Show(x.)
+            
+        }
+        /// <summary>
+        /// Dessine le rectangle sous la coordonné
+        /// </summary>
+        /// <param name="coords"></param>
+        private void DrawSelection(FPoint coords)
         {
             
             DrawRect(BorderOfSelection, InteriorOfSelection, coords.X * GridRectWidth, coords.Y * GridRectHeight, GridRectWidth, GridRectHeight);
@@ -141,7 +187,7 @@ namespace BattleShipGrid
         /// <param name="StartY">Début en Y de la  ligne</param>
         /// <param name="EndX">Fin en X de la ligne</param>
         /// <param name="EndY">Fin en Y de la ligne</param>
-        private void DrawLine(Color couleur, int StartX, int StartY, int EndX, int EndY)
+        private void DrawLine(Color couleur, float StartX, float StartY, float EndX, float EndY)
         {
             System.Drawing.Pen myPen;
             myPen = new System.Drawing.Pen(couleur);
@@ -160,7 +206,7 @@ namespace BattleShipGrid
         /// <param name="y">Origine en Y du rectangle</param>
         /// <param name="width">Largeur du rectangle</param>
         /// <param name="height">Hauteur du rectangle</param>
-        private void DrawRect(Color BorderColor, Color FillColor, int x, int y, int width, int height)
+        private void DrawRect(Color BorderColor, Color FillColor, float x, float y, float width, float height)
         {
 
             Pen myPen;
@@ -174,5 +220,6 @@ namespace BattleShipGrid
             formGraphics.Dispose();
 
         }
+        #endregion
     }
 }
