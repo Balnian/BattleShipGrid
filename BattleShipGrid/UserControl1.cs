@@ -144,7 +144,7 @@ namespace BattleShipGrid
         private void DrawShips()
         {
             if(PorteAvions!= null)
-                DrawImage(PorteAvions,2*GridRectWidth,2*GridRectWidth,5*GridRectWidth,1*GridRectHeight);
+                DrawImage(PorteAvions,2*GridRectWidth,2*GridRectHeight,5*GridRectWidth,1*GridRectHeight);
         }
 
         private void DrawImage(Image img, float x, float y, float width, float height)
